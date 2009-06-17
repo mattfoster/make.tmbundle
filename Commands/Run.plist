@@ -47,7 +47,7 @@ TextMate::Executor.run("make", flags, :verb =&gt; "Making") do |line, type|
       "&lt;script&gt;if(typeof(TextMate.progress) != 'undefined'){TextMate.progress = #{$1.to_f / 100};}&lt;/script&gt;"
     end + '&lt;br /&gt;'
   end
-  line
+  type == :err ? nil : line
 end
 </string>
 	<key>input</key>

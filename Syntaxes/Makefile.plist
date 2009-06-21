@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>comment</key>
+	<string>TODO: pull common parts into repository, add support for other gnu make bits and bobs, consider splitting into gnu/bsd make grammars</string>
 	<key>fileTypes</key>
 	<array>
 		<string>GNUmakefile</string>
@@ -9,22 +11,36 @@
 		<string>Makefile</string>
 		<string>OCamlMakefile</string>
 	</array>
+	<key>keyEquivalent</key>
+	<string>^~M</string>
 	<key>name</key>
 	<string>Makefile</string>
 	<key>patterns</key>
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^(\w|[-_])+\s*\??=</string>
+			<string>^((\w|[-_\.])+)\s*\??=</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.makefile</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>should not include all of makefile. eg. I dont think a = b = c works.</string>
 			<key>end</key>
 			<string>$</string>
-			<key>name</key>
-			<string>variable.other.makefile</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>\\\n</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.makefile</string>
 				</dict>
 			</array>
 		</dict>
@@ -69,6 +85,175 @@
 			</array>
 		</dict>
 		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>comment</key>
+			<string>it seems to be possible to instert make syntax into strings.</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.makefile</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>[\b\s+](\+:?\??\=)</string>
+			<key>name</key>
+			<string>punctuation.definition.variable.makefile</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\$\()(\w+)\b\s+</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.variable.expansion.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.function.string.makefile</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>meta / constant  used here for colouring.</string>
+			<key>end</key>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.variable.expansion.makefile</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.parenthesis.function.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.makefile</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(\${)(\w+)\b\s+</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.function.string.makefile</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>markup.braces.function.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.makefile</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.makefile</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\${)(\w+)(})</string>
+			<key>name</key>
+			<string>markup.braces.expansion.makefile</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.makefile</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\$\()(\w+)(\))</string>
+			<key>name</key>
+			<string>markup.parenthesis.expansion.makefile</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\$[@\*])</string>
+			<key>name</key>
+			<string>entity.parameter.target.makefile</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\$[\^\+&lt;\?])</string>
+			<key>name</key>
+			<string>storage.parameter.prerequisite.makefile</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(\$[%])</string>
+			<key>name</key>
+			<string>keyword.parameter.misc.makefile</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^(\s*)\b(\-??\.?include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef)\b</string>
+			<key>name</key>
+			<string>keyword.control.makefile</string>
+		</dict>
+		<dict>
 			<key>match</key>
 			<string>^\t\s*$</string>
 			<key>name</key>
@@ -76,9 +261,9 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^(\s*)\b(\-??include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef|override)\b</string>
+			<string>^(\s*)\b(\-??\.?override)</string>
 			<key>name</key>
-			<string>keyword.control.makefile</string>
+			<string>storage.modifier.override.makefile</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -93,6 +278,12 @@
 			<string>^([^\t ]+:(?!\=))\s*.*</string>
 			<key>name</key>
 			<string>meta.function.makefile</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\\(\s+)$\n</string>
+			<key>name</key>
+			<string>invalid.illegal.continuation</string>
 		</dict>
 	</array>
 	<key>scopeName</key>

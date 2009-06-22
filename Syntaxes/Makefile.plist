@@ -19,7 +19,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^((\w|[-_\.])+)\s*\??=</string>
+			<string>^\s*((\w|[-_\.])+)\s*\??=</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -106,6 +106,46 @@
 			<string>[\b\s+](\+:?\??\=)</string>
 			<key>name</key>
 			<string>punctuation.definition.variable.makefile</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>(define)\s+([\w\s]+)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.define.macro.makefile</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>endef</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.makefile</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string></string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.makefile</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.shell</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -249,7 +289,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^(\s*)\b(\-??\.?include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport|define|endef)\b</string>
+			<string>^(\s*)\b(\-??\.?include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport)\b</string>
 			<key>name</key>
 			<string>keyword.control.makefile</string>
 		</dict>

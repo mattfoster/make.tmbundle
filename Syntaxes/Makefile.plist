@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>comment</key>
-	<string>TODO: pull common parts into repository, add support for other gnu make bits and bobs, consider splitting into gnu/bsd make grammars</string>
+	<string>TODO:  
+	• add support for other gnu make bits and bobs, 
+	• consider splitting into gnu/bsd make grammars</string>
 	<key>fileTypes</key>
 	<array>
 		<string>GNUmakefile</string>
@@ -18,32 +20,172 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>^\s*((\w|[-_\.])+)\s*\??=</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>variable.other.makefile</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>should not include all of makefile. eg. I dont think a = b = c works.</string>
-			<key>end</key>
-			<string>$</string>
+			<key>include</key>
+			<string>#everything</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>all_builtins</key>
+		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\\\n</string>
+					<key>include</key>
+					<string>#parameter_builtins</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>source.makefile</string>
+					<string>#prereq_builtins</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#misc_builtins</string>
 				</dict>
 			</array>
 		</dict>
+		<key>all_but_task</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#all_but_task_and_variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable</string>
+				</dict>
+			</array>
+		</dict>
+		<key>all_but_task_and_variable</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#all_keywords</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_builtins</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_illegal</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_strings</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_expansions</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#assignment_operators</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_functions</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#macro</string>
+				</dict>
+			</array>
+		</dict>
+		<key>all_expansions</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#braces_expansion</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#parens_expansion</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#backtick_shell_interp</string>
+				</dict>
+			</array>
+		</dict>
+		<key>all_functions</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#paren_shell_func</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#paren_func</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#braces_func</string>
+				</dict>
+			</array>
+		</dict>
+		<key>all_illegal</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#bad_continuation</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bad_line_ending</string>
+				</dict>
+			</array>
+		</dict>
+		<key>all_keywords</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#keywords</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#override</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+			</array>
+		</dict>
+		<key>all_strings</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#double_string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#single_string</string>
+				</dict>
+			</array>
+		</dict>
+		<key>assignment_operators</key>
+		<dict>
+			<key>match</key>
+			<string>[\b\s+](\+:?\??\=)</string>
+			<key>name</key>
+			<string>punctuation.definition.variable.makefile</string>
+		</dict>
+		<key>backtick_shell_interp</key>
 		<dict>
 			<key>begin</key>
 			<string>`</string>
@@ -59,132 +201,46 @@
 				</dict>
 			</array>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>#</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.makefile</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>$\n?</string>
-			<key>name</key>
-			<string>comment.line.number-sign.makefile</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;!\\)\\$\n</string>
-					<key>name</key>
-					<string>punctuation.separator.continuation.makefile</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>"</string>
-			<key>comment</key>
-			<string>it seems to be possible to instert make syntax into strings.</string>
-			<key>end</key>
-			<string>"</string>
-			<key>name</key>
-			<string>string.quoted.double.makefile</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.makefile</string>
-				</dict>
-			</array>
-		</dict>
+		<key>bad_continuation</key>
 		<dict>
 			<key>match</key>
-			<string>[\b\s+](\+:?\??\=)</string>
+			<string>^\t\s*$</string>
 			<key>name</key>
-			<string>punctuation.definition.variable.makefile</string>
+			<string>invalid.deprecated.opaque-rule-continuation.makefile</string>
 		</dict>
+		<key>bad_line_ending</key>
 		<dict>
-			<key>begin</key>
-			<string>(define)\s+([\w\s]+)</string>
-			<key>beginCaptures</key>
+			<key>match</key>
+			<string>\\(\s+)$\n</string>
+			<key>name</key>
+			<string>invalid.illegal.continuation</string>
+		</dict>
+		<key>braces_expansion</key>
+		<dict>
+			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.makefile</string>
+					<string>variable.variable.expansion.makefile</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>variable.define.macro.makefile</string>
+					<string>variable.other.makefile</string>
 				</dict>
-			</dict>
-			<key>end</key>
-			<string>endef</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
+				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.makefile</string>
+					<string>variable.variable.expansion.makefile</string>
 				</dict>
 			</dict>
+			<key>match</key>
+			<string>(\${)(\w+)(})</string>
 			<key>name</key>
-			<string></string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.makefile</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>source.shell</string>
-				</dict>
-			</array>
+			<string>markup.braces.expansion.makefile</string>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(\$\()(\w+)\b\s+</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>constant.variable.expansion.makefile</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.function.string.makefile</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>meta / constant  used here for colouring.</string>
-			<key>end</key>
-			<string>(\))</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>constant.variable.expansion.makefile</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.parenthesis.function.makefile</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>source.makefile</string>
-				</dict>
-			</array>
-		</dict>
+		<key>braces_func</key>
 		<dict>
 			<key>begin</key>
 			<string>(\${)(\w+)\b\s+</string>
@@ -217,115 +273,337 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>source.makefile</string>
+					<string>#all_but_task</string>
 				</dict>
 			</array>
 		</dict>
+		<key>comment</key>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>#</string>
+			<key>beginCaptures</key>
 			<dict>
-				<key>1</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>variable.variable.expansion.makefile</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>variable.other.makefile</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>variable.variable.expansion.makefile</string>
+					<string>punctuation.definition.comment.makefile</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>(\${)(\w+)(})</string>
+			<key>end</key>
+			<string>$\n?</string>
 			<key>name</key>
-			<string>markup.braces.expansion.makefile</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
+			<string>comment.line.number-sign.makefile</string>
+			<key>patterns</key>
+			<array>
 				<dict>
+					<key>match</key>
+					<string>(?&lt;!\\)\\$\n</string>
 					<key>name</key>
-					<string>variable.variable.expansion.makefile</string>
+					<string>punctuation.separator.continuation.makefile</string>
 				</dict>
-				<key>2</key>
+			</array>
+		</dict>
+		<key>double_string</key>
+		<dict>
+			<key>begin</key>
+			<string>"</string>
+			<key>comment</key>
+			<string>it seems to be possible to insert make syntax into strings.</string>
+			<key>end</key>
+			<string>"</string>
+			<key>name</key>
+			<string>string.quoted.double.makefile</string>
+			<key>patterns</key>
+			<array>
 				<dict>
-					<key>name</key>
-					<string>variable.other.makefile</string>
+					<key>include</key>
+					<string>#all_but_task</string>
 				</dict>
-				<key>3</key>
+			</array>
+		</dict>
+		<key>everything</key>
+		<dict>
+			<key>patterns</key>
+			<array>
 				<dict>
-					<key>name</key>
-					<string>variable.variable.expansion.makefile</string>
+					<key>include</key>
+					<string>#task</string>
 				</dict>
-			</dict>
-			<key>match</key>
-			<string>(\$\()(\w+)(\))</string>
-			<key>name</key>
-			<string>markup.parenthesis.expansion.makefile</string>
+				<dict>
+					<key>include</key>
+					<string>#all_but_task</string>
+				</dict>
+			</array>
 		</dict>
-		<dict>
-			<key>match</key>
-			<string>(\$[@\*])</string>
-			<key>name</key>
-			<string>entity.parameter.target.makefile</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(\$[\^\+&lt;\?])</string>
-			<key>name</key>
-			<string>storage.parameter.prerequisite.makefile</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(\$[%])</string>
-			<key>name</key>
-			<string>keyword.parameter.misc.makefile</string>
-		</dict>
+		<key>keywords</key>
 		<dict>
 			<key>match</key>
 			<string>^(\s*)\b(\-??\.?include|ifeq|ifneq|ifdef|ifndef|else|endif|vpath|export|unexport)\b</string>
 			<key>name</key>
 			<string>keyword.control.makefile</string>
 		</dict>
+		<key>macro</key>
+		<dict>
+			<key>begin</key>
+			<string>(define)\s+([\w\s]+)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.defintion.macro.makefile</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>endef</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.makefile</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.definition.macro.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#all_but_task</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>misc_builtins</key>
 		<dict>
 			<key>match</key>
-			<string>^\t\s*$</string>
+			<string>(\$[%])</string>
 			<key>name</key>
-			<string>invalid.deprecated.opaque-rule-continuation.makefile</string>
+			<string>keyword.parameter.misc.makefile</string>
 		</dict>
+		<key>override</key>
 		<dict>
 			<key>match</key>
 			<string>^(\s*)\b(\-??\.?override)</string>
 			<key>name</key>
 			<string>storage.modifier.override.makefile</string>
 		</dict>
+		<key>parameter_builtins</key>
+		<dict>
+			<key>match</key>
+			<string>(\$[@\*])</string>
+			<key>name</key>
+			<string>entity.parameter.target.makefile</string>
+		</dict>
+		<key>paren_func</key>
+		<dict>
+			<key>begin</key>
+			<string>(\$\()(\w+)\b\s+</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.variable.expansion.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.function.string.makefile</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Functions are similar to expansions, but start with a 
+			function name: e.g.: $(foo bar)</string>
+			<key>end</key>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.variable.expansion.makefile</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.parenthesis.function.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#all_but_task</string>
+				</dict>
+			</array>
+		</dict>
+		<key>paren_shell_func</key>
+		<dict>
+			<key>begin</key>
+			<string>(\$\()(shell)\b\s+</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.variable.expansion.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.function.shell.makefile</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>meta / constant  used here for colouring.</string>
+			<key>end</key>
+			<string>(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.variable.expansion.makefile</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.parenthesis.shell.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#shell_and_variable_expansions</string>
+				</dict>
+			</array>
+		</dict>
+		<key>parens_expansion</key>
 		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.function.makefile</string>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.makefile</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.variable.expansion.makefile</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Expansions do not contain keywords. 
+		    Otherwise the syntax is the same as for functions</string>
+			<key>match</key>
+			<string>(\$\()(\w+)(\))</string>
+			<key>name</key>
+			<string>markup.parenthesis.expansion.makefile</string>
+		</dict>
+		<key>prereq_builtins</key>
+		<dict>
+			<key>match</key>
+			<string>(\$[\^\+&lt;\?])</string>
+			<key>name</key>
+			<string>storage.parameter.prerequisite.makefile</string>
+		</dict>
+		<key>shell_and_variable_expansions</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#all_expansions</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_functions</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.shell</string>
+				</dict>
+			</array>
+		</dict>
+		<key>single_string</key>
+		<dict>
+			<key>begin</key>
+			<string>'</string>
+			<key>end</key>
+			<string>'</string>
+			<key>name</key>
+			<string>string.quoted.single.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#all_but_task</string>
+				</dict>
+			</array>
+		</dict>
+		<key>task</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.task.makefile</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>^([^\t ]+:(?!\=))\s*.*</string>
 			<key>name</key>
-			<string>meta.function.makefile</string>
+			<string>meta.task.makefile</string>
 		</dict>
+		<key>variable</key>
 		<dict>
-			<key>match</key>
-			<string>\\(\s+)$\n</string>
+			<key>begin</key>
+			<string>^\s*((\w|[-_\.])+)\s*(:?[\+\?]?=)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.makefile</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.variable.makefile</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>I dont think a = b = c works. 
+			So variable #variable in not included</string>
+			<key>end</key>
+			<string>$</string>
 			<key>name</key>
-			<string>invalid.illegal.continuation</string>
+			<string>meta.definition.variable.makefile</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\\n</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#all_but_task_and_variable</string>
+				</dict>
+			</array>
 		</dict>
-	</array>
+	</dict>
 	<key>scopeName</key>
 	<string>source.makefile</string>
 	<key>uuid</key>

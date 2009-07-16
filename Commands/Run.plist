@@ -32,20 +32,18 @@ dirs = [ENV['TM_PROJECT_DIRECTORY']]
 TextMate::Executor.run("make", flags, :verb =&gt; "Making") do |line, type|
   if line =~ /^make.*?: Entering directory `(.*?)'$/ and not $1.nil? and File.directory?($1)
     dirs.unshift($1)
-    line = ""
+    ""
   elsif line =~ /^make.*?: Leaving directory `(.*?)'$/ and not $1.nil? and File.directory?($1)
     dirs.delete($1)
-    line = ""
+    ""
   elsif line =~ /^(.*?):(?:(\d+):)?\s*(.*?)$/ and not $1.nil?
     expanded_path = dirs.map{ |dir| File.expand_path($1, dir) }.find{ |path| File.file?path }
-    line = expanded_path ? "&lt;a href=\"txmt://open?url=file://#{e_url expanded_path}#{$2.nil? ? '' : "&amp;line=" + $2}\"&gt;#{htmlize $3}&lt;/a&gt;\n" : nil
-  end
-  unless line.nil? or line.empty?
-    line = line.gsub(/\[\s*(\d+)%\s*\]/) do
+    expanded_path ? "&lt;a href=\"txmt://open?url=file://#{e_url expanded_path}#{$2.nil? ? '' : "&amp;line=" + $2}\"&gt;#{htmlize $3}&lt;/a&gt;\n" : nil
+  elsif line =~ /\[\s*(\d+)%\s*\]/
+    line.gsub(/\[\s*(\d+)%\s*\]/) do
       "&lt;script&gt;if(typeof(TextMate.progress) != 'undefined'){TextMate.progress = #{$1.to_f / 100};}&lt;/script&gt;"
     end + '&lt;br&gt;'
   end
-  line
 end
 </string>
 	<key>input</key>
